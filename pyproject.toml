@@ -1,0 +1,22 @@
+[project]
+name = "platform-dbc"
+version = "0.1.0"
+description = "CAN message definition used in WUST-Sat"
+authors = [
+    {name = "Juliusz Tarnowski",email = "juliusz.stanislaw.tarnowski@gmail.com"},
+    {name = "Mikolaj Bajor",email = "mikolaj.bajor.2002@gmail.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.10"
+
+packages = [
+  { include = "platform-dbc" },
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.dependencies]
+cantools = "^40.2.1"
