@@ -17,7 +17,8 @@ from platform_dbc.modules import (MODULES, MessageType, Module,
 
 def create_heartbeat_message(module: Module) -> cantools.database.can.Message:
     """Create a heartbeat message definition for a specific module."""
-    frame_id = module.get_message_id(MessageType.HEARTBEAT)
+    BROADCAST_ID = 15
+    frame_id = module.get_message_id(BROADCAST_ID, MessageType.HEARTBEAT)
 
     timestamp_signal = cantools.database.can.Signal(
         name="unix_timestamp",
@@ -36,6 +37,7 @@ def create_heartbeat_message(module: Module) -> cantools.database.can.Message:
         senders=[module.name],
         comment=f"Heartbeat from {module.description}",
         signals=[timestamp_signal],
+        is_extended_frame=True,
     )
 
     return heartbeat_message

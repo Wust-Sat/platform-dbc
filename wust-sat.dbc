@@ -36,19 +36,19 @@ BS_:
 BU_: 
 
 
-BO_ 17 COMM_Heartbeat: 4 COMM
+BO_ 2147549171 LORA_Heartbeat: 4 LORA
  SG_ unix_timestamp : 0|32@1+ (1,0) [0|0] "s" Vector__XXX
 
-BO_ 97 OBC_Heartbeat: 4 OBC
+BO_ 2147549180 OBC_CM_Heartbeat: 4 OBC_CM
  SG_ unix_timestamp : 0|32@1+ (1,0) [0|0] "s" Vector__XXX
 
 
 
 
-CM_ BO_ 17 "Heartbeat from UHF Communication System";
-CM_ SG_ 17 unix_timestamp "Unix timestamp in seconds";
-CM_ BO_ 97 "Heartbeat from On-Board Computer Compute Module";
-CM_ SG_ 97 unix_timestamp "Unix timestamp in seconds";
+CM_ BO_ 2147549171 "Heartbeat from LoRa Communication System";
+CM_ SG_ 2147549171 unix_timestamp "Unix timestamp in seconds";
+CM_ BO_ 2147549180 "Heartbeat from On-Board Computer Compute Module";
+CM_ SG_ 2147549180 unix_timestamp "Unix timestamp in seconds";
 
 
 

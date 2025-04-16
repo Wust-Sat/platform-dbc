@@ -14,7 +14,7 @@ class MessageType(Enum):
     """Enum of message types with their CAN ID offsets."""
 
     STATUS = 0x00
-    HEARTBEAT = 0x01
+    HEARTBEAT = 0xFF
     # Additional message types can be added here
 
 
@@ -22,58 +22,126 @@ class MessageType(Enum):
 class Module:
     """Satellite module definition."""
 
-    id: int  # Number of modules is limited to 16
+    id: int
     name: str
     description: str
     active: bool = True
 
-    def get_message_id(self, message_type: MessageType) -> int:
-        "Return the CAN ID for a specific message type from this module."
-        return self.id + message_type.value * 0x10
+    def get_message_id(
+        self,
+        destination_id: int,
+        message_type: MessageType,
+        # ground_station_flag: bool = False,
+    ) -> int:
+        """
+        Construct the 29-bit CAN ID.
+
+        Args:
+            destination_id: The 4-bit ID of the target module (0-14) or
+                            broadcast (15).
+            message_type: An enum member defining the message purpose. Its
+                          value is the 8-bit message type identifier.
+            # ground_station_flag: Set to True if the message originates from or
+            #                      is destined for a ground station stream.
+
+        Returns:
+            The calculated 29-bit CAN message ID.
+
+        Raises:
+            ValueError: If input IDs or message type values are out of range.
+        """
+        if not (0 <= self.id <= 15):
+            raise ValueError(f"Source ID {self.id} out of range (0-15)")
+        if not (0 <= destination_id <= 15):
+            raise ValueError(
+                f"Destination ID {destination_id} out of range (0-15)"
+            )
+        if not (0 <= message_type.value <= 255):
+            raise ValueError(
+                f"Message Type value {message_type.value} out of range (0-255)"
+            )
+
+        # Construct the ID according to the specification:
+        # Bits 0-3:   Source ID
+        # Bits 4-7:   Destination ID
+        # Bits 8-15:  Message Type
+        # Bit 16:     Ground Station Flag
+        # Bits 17-28: Reserved (implicitly 0)
+
+        can_id = (
+            (self.id & 0x0F)
+            | ((destination_id & 0x0F) << 4)
+            | ((message_type.value & 0xFF) << 8)
+            # | ((1 if ground_station_flag else 0) << 16)
+        )
+        return can_id
 
 
 # Define all modules
 MODULES: list[Module] = [
     Module(
         id=0x0,
-        name="EPS",
-        description="Electrical Power System",
+        name="EPS_1",
+        description="Electrical Power System - 1",
         active=False,
     ),
     Module(
         id=0x1,
-        name="COMM",
-        description="UHF Communication System",
+        name="EPS_2",
+        description="Electrical Power System - 2",
+        active=False,
     ),
     Module(
         id=0x2,
-        name="LORA",
-        description="LoRa Communication System",
+        name="EPS_3",
+        description="Electrical Power System - 3",
         active=False,
     ),
     Module(
         id=0x3,
+        name="LORA",
+        description="LoRa Communication System",
+        active=True,
+    ),
+    Module(
+        id=0x4,
+        name="COMM",
+        description="UHF Communication System",
+        active=False,
+    ),
+    Module(
+        id=0x5,
         name="SBAND",
         description="S-Band Communication System",
         active=False,
     ),
     Module(
-        id=0x4,
-        name="MB",
+        id=0x6,
+        name="OBC_MB",
         description="On-Board Computer Motherboard",
         active=False,
     ),
     Module(
-        id=0x5,
-        name="OBC",
-        description="On-Board Computer Compute Module",
-    ),
-    Module(
-        id=0xE,
+        id=0xB,
         name="ADCS",
         description="Attitude Determination and Control System",
         active=False,
     ),
+    Module(
+        id=0xC,
+        name="OBC_CM",
+        description="On-Board Computer Compute Module",
+        active=True,
+    ),
+    Module(
+        id=0xE,
+        name="PAYLOAD",
+        description="Payload handler module",
+        active=False,
+    ),
+    # Module(
+    #     id=0xF, name="BROADCAST", description="Broadcast Address", active=True
+    # ),
 ]
 
 # lookup dictionaries
