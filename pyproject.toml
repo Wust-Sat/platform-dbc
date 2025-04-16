@@ -8,15 +8,72 @@ authors = [
 ]
 license = {text = "MIT"}
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.12"
 
 packages = [
   { include = "platform_dbc" },
 ]
 
+[tool.poetry.dependencies]
+cantools = "^40.2.1"
+
+[tool.poetry.group.dev.dependencies]
+poethepoet = "^0.31.1"
+black = "^24.10.0"
+isort = "^5.13.2"
+editorconfig-checker = "^3.2.0"
+ruff = "^0.9.1"
+pytest = "^8.3.4"
+
+[tool.poe.env]
+SRC_FOLDER = "platform_dbc"
+TESTS_FOLDER = "tests"
+ALL_FOLDERS = "${SRC_FOLDER} ${TESTS_FOLDER}"
+
+[tool.poe.tasks]
+black = "black --preview --enable-unstable-feature string_processing ${ALL_FOLDERS}"
+black_check = "black --check --diff ${ALL_FOLDERS}"
+
+isort = "python3 -m isort ${ALL_FOLDERS}"
+isort_check = "python3 -m isort --check ${ALL_FOLDERS}"
+
+editorconfig = "ec"
+
+format = ["black", "isort"]
+format_check = ["black_check", "isort_check", "editorconfig"]
+
+ruff = "ruff check ${ALL_FOLDERS}"
+ruff_fix = "ruff check --fix ${ALL_FOLDERS}"
+
+fix = ["format", "ruff_fix"]
+lint = ["format_check", "ruff"]
+test = "pytest -sv"
+all = ["lint", "test"]
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
+
+[tool.ruff.lint]
+select = [
+  "F",   # flake8
+  "E",   # pycodestyle
+  "PLE", # pylint
+  "S",   # bandit
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
+"tests/**/*.py" = [
+  "S101", # asserts allowed in tests...
+]
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.poetry.dependencies]
-cantools = "^40.2.1"
