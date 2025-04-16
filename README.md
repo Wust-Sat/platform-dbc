@@ -14,17 +14,14 @@ CAN message definition used in WUST-Sat.
 
 A CAN message consists of two main elements: an ID and a payload.
 
+
 ### Message ID
 
-Each message type has a unique ID. We're using the 11-bit standard (rather
-than 29-bit). Lower ID numbers have higher priority on the network.
+Each message type has a unique ID. We're using the 29-bit standard. Lower ID
+numbers have higher priority on the network.
 
-The ID encodes two pieces of information:
-- Last 4 bits: Module identifier
-- Remaining bits: Message type
+ID structure is described in the [WUST-Sat Platform Communication Architecture](https://github.com/Wust-Sat/architecture/blob/master/docs/platform-communication.md)
 
-Example: An s-band module (ID: 3) sending a heartbeat message (type: 1) would
-have frame ID 0x013 in hexadecimal or 20 in decimal.
 
 ### Message Payload
 
