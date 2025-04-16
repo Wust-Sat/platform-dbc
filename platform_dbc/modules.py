@@ -6,19 +6,12 @@ and other module-specific configuration.
 """
 
 from dataclasses import dataclass
-from enum import Enum
 from typing import Optional
 
-
-class MessageType(Enum):
-    """Enum of message types with their CAN ID offsets."""
-
-    STATUS = 0x00
-    HEARTBEAT = 0xFF
-    # Additional message types can be added here
+from platform_dbc.message_types import MessageType
 
 
-@dataclass
+@dataclass(frozen=True)
 class Module:
     """Satellite module definition."""
 
@@ -34,21 +27,7 @@ class Module:
         # ground_station_flag: bool = False,
     ) -> int:
         """
-        Construct the 29-bit CAN ID.
-
-        Args:
-            destination_id: The 4-bit ID of the target module (0-14) or
-                            broadcast (15).
-            message_type: An enum member defining the message purpose. Its
-                          value is the 8-bit message type identifier.
-            # ground_station_flag: Set to True if the message originates from or
-            #                      is destined for a ground station stream.
-
-        Returns:
-            The calculated 29-bit CAN message ID.
-
-        Raises:
-            ValueError: If input IDs or message type values are out of range.
+        Calculate the 29-bit CAN ID.
         """
         if not (0 <= self.id <= 15):
             raise ValueError(f"Source ID {self.id} out of range (0-15)")
@@ -139,9 +118,6 @@ MODULES: list[Module] = [
         description="Payload handler module",
         active=False,
     ),
-    # Module(
-    #     id=0xF, name="BROADCAST", description="Broadcast Address", active=True
-    # ),
 ]
 
 # lookup dictionaries
