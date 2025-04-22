@@ -117,6 +117,21 @@ jupyter = ["ipython (>=7.8.0)", "tokenize-rt (>=3.2.0)"]
 uvloop = ["uvloop (>=0.15.2)"]
 
 [[package]]
+name = "canopen"
+version = "2.3.0"
+description = "CANopen stack implementation"
+optional = false
+python-versions = ">=3.8"
+groups = ["main"]
+files = [
+    {file = "canopen-2.3.0-py3-none-any.whl", hash = "sha256:7a62274af6ded7ee85ee96f4ada3afa38bc8607a91f306dcc202c3c8cf2850d7"},
+    {file = "canopen-2.3.0.tar.gz", hash = "sha256:792084a93c138d5b2a406ddd2d4eb5ce208f03bd8fda60f81ad2bb8d56c6b827"},
+]
+
+[package.dependencies]
+python-can = ">=3.0.0"
+
+[[package]]
 name = "cantools"
 version = "40.2.1"
 description = "CAN BUS tools."
@@ -671,4 +686,4 @@ files = [
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12"
-content-hash = "72d3476796851b67868ef13829f4f95ab2b21b98a245545542d84339949cb07f"
+content-hash = "ec59474d27b85510885f76a55e350928e9531263add2b458ec26148f848d2a82"

@@ -1,0 +1,114 @@
+[FileInfo]
+FileName=obc.eds
+FileVersion=1
+FileRevision=0
+Description=WUST-Sat OBC Module CANopen Definition
+CreationDate=2025-04-22
+CreationTime=01:50:00
+CreatedBy=WUST
+ModificationDate=2025-04-22
+ModificationTime=01:50:00
+ModifiedBy=WUST
+
+[DeviceInfo]
+VendorName=WUST
+VendorNumber=0x00000057
+ProductName=WUST-Sat OBC Module
+ProductNumber=0x0000000D
+RevisionNumber=0x00010000
+OrderCode=WUST-OBC-V1
+BaudRate_10=0
+BaudRate_20=0
+BaudRate_50=0
+BaudRate_125=0
+BaudRate_250=0
+BaudRate_500=0
+BaudRate_800=0
+BaudRate_1000=1 ; Indicate support for 1Mbit/s (adjust if needed)
+Granularity=8 ; Not strictly needed for simulation
+DynamicChannelsSupported=0
+SimpleBootUpMaster=1 ; OBC might act as NMT master
+SimpleBootUpSlave=0
+IdentityObjects=1 ; Enable Identity Object 0x1018
+MandatoryObjects=3 ; Number of mandatory objects defined below (1000, 1001, 1018)
+
+[MandatoryObjects]
+SupportedObjects=3
+1=1000 ; Device Type
+2=1001 ; Error Register
+3=1018 ; Identity Object
+
+[OptionalObjects]
+SupportedObjects=2 ; Number of optional objects defined below (1017, 2000)
+1=1017 ; Producer Heartbeat Time
+2=2000 ; OBC Status Register
+
+; Object Definitions
+
+[1000]
+ParameterName=Device Type
+ObjectType=0x7 ; VAR
+DataType=0x0007 ; UNSIGNED32
+AccessType=ro
+DefaultValue=0x00000000
+
+[1001]
+ParameterName=Error Register
+ObjectType=0x7 ; VAR
+DataType=0x0005 ; UNSIGNED8
+AccessType=ro
+DefaultValue=0x00
+
+[1017]
+ParameterName=Producer Heartbeat Time
+ObjectType=0x7 ; VAR
+DataType=0x0006 ; UNSIGNED16
+AccessType=rw
+DefaultValue=1000 ; ms
+
+[1018]
+ParameterName=Identity Object
+ObjectType=0x9 ; RECORD
+SubNumber=5 ; Includes Sub0 itself + 4 entries
+
+[1018sub0]
+ParameterName=Number of Entries
+ObjectType=0x7 ; VAR
+DataType=0x0005 ; UNSIGNED8
+AccessType=ro
+DefaultValue=4
+
+[1018sub1]
+ParameterName=Vendor ID
+ObjectType=0x7 ; VAR
+DataType=0x0007 ; UNSIGNED32
+AccessType=ro
+DefaultValue=0x00000057 ; Placeholder WUST ID
+
+[1018sub2]
+ParameterName=Product Code
+ObjectType=0x7 ; VAR
+DataType=0x0007 ; UNSIGNED32
+AccessType=ro
+DefaultValue=0x0000000D ; Based on HW ID
+
+[1018sub3]
+ParameterName=Revision Number
+ObjectType=0x7 ; VAR
+DataType=0x0007 ; UNSIGNED32
+AccessType=ro
+DefaultValue=0x00010000 ; v1.0
+
+[1018sub4]
+ParameterName=Serial Number
+ObjectType=0x7 ; VAR
+DataType=0x0007 ; UNSIGNED32
+AccessType=ro
+DefaultValue=0x00000002 ; Placeholder SN
+
+[2000]
+ParameterName=OBC Status Register
+ObjectType=0x7 ; VAR
+DataType=0x0005 ; UNSIGNED8
+AccessType=ro
+DefaultValue=1
