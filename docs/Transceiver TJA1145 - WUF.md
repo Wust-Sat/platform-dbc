@@ -38,6 +38,12 @@ The transitions between modes are illustrated in Fig. 4 in the data sheet [TJA11
 
 ![alt text](tr_image.png)
 
+## Important registers
+
+1. Bit responsible for 29-bit frames register 2Fh bit 7 -> 1
+2. ID Registers 27h to 2Ah
+3. ID Mask Registers 2Bh to 2Eh (where 1 means don't care)
+
 ## Waking up individual transceivers
 
 The description of the wake-up process is explained in the datasheet [TJA1145](https://www.nxp.com/docs/en/data-sheet/TJA1145.pdf).
@@ -46,7 +52,7 @@ Wake-up frame - **Chapter 7.3.1. Wake-up frames (WUF)**.
 ### Format of the wake-up frame (WUF)
 
 The wake-up frame is structured as:\
-d4 d3 d2 d1 | i8 i7 i6 i5 i4 i3 i2 i1
+... d4 d3 d2 d1 | i8 i7 i6 i5 i4 i3 i2 i1
 
 Where:
 
@@ -70,3 +76,9 @@ If you want to wake up devices 00001000 and 00000010, send the frame 0001|000010
 ![alt text](tr_image-1.png)
 
 The transiver does not have a sleep frame - analogous to the wake-up frame - so it usually goes into sleep/stanby mode due to lack of communication.
+
+#### Alternatively
+
+Alternatively, you can set DLC to 0 and then select the device you want to wake up, for example for device with ID=1:\
+d4 d3 d2 d1 | i8 i7 i6 i5 i4 i3 i2 i1\
+0 0 0 0 | 0 0 0 0 0 0 0 1
